@@ -7,7 +7,7 @@ layout: default
   <nav>
     <ol class="breadcrumbs">
       <li><a href="/">{% t top.title %}</a></li>
-      <li><i class="fas fa-angle-right"></i> <a href="/{{page.category}}">{% t {{page.category}}.title %}</a></li>
+      <li><i class="fas fa-angle-right"></i> <a href="/{{page.category}}/">{% t {{page.category}}.title %}</a></li>
     </ol>
   </nav>
   <div class="post-content">
@@ -34,4 +34,5 @@ layout: default
   </div>
   <a href="/{{page.category}}" class="button" style="display: block;color: #34a2df;">記事一覧に戻る</a>
 </div>
+{% include support.html %}
 {% include footer.html %}

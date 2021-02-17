@@ -7,10 +7,23 @@
   <head>
     <meta charset="utf-8">
 
-    {% if jekyll.environment == "development" %}
+    {% if jekyll.environment == "production" %}
+    <link rel="preconnect dns-prefetch" href="https://res.cloudinary.com/">
+    <link rel="preconnect dns-prefetch" href="https://www.google-analytics.com/">
+    <link rel="preconnect dns-prefetch" href="https://www.googletagmanager.com/">
+    {% endif %}
+    <link rel="preload" as="font" href="https://mekurun.com/assets/fonts/Noto_Sans_JP/noto-sans-jp-v28-latin_japanese-700.woff2" crossorigin>
+    <link rel="preload" as="font" href="https://mekurun.com/assets/fonts/Noto_Sans_JP/noto-sans-jp-v28-latin_japanese-500.woff2" crossorigin>
+    <link rel="preload" as="font" href="https://mekurun.com/assets/fonts/Noto_Sans_JP/noto-sans-jp-v28-latin_japanese-regular.woff2" crossorigin>
+
+    <link rel="preload" as="font" href="https://mekurun.com/assets/fontawesome/webfonts/fa-brands-400.woff2" crossorigin>
+    <link rel="preload" as="font" href="https://mekurun.com/assets/fontawesome/webfonts/fa-solid-900.woff2" crossorigin>
+    <link rel="preload" as="font" href="https://mekurun.com/assets/fontawesome/webfonts/fa-regular-400.woff2" crossorigin>
+
+    {% if jekyll.environment == "development" or page.noindex == true %}
       <meta name="robots" content="noindex">
     {% elsif jekyll.environment == "production" %}
-      {% if site.lang == "kana" or site.lang == "en" %}<!--英語版リリース時変更-->
+      {% if site.lang == "en" %}<!--英語版リリース時変更-->
         <meta name="robots" content="noindex">
       {% elsif page.lang %}
         {% if page.lang == "en" and site.lang != "en" %}
@@ -59,6 +72,12 @@
     {% capture description %}{% if page.description %}{% if page.layout == 'category' or page.layout == 'page' %}{% t page.description %}{% else %}{{ page.description }}{% endif %}{% else %}{% t description %}{% endif %}{% endcapture %}
     <meta name="description" content="{{ description }}">
     <meta property="og:description" content="{{ description }}">
+
+    {% if page.url == '/' %}
+    <meta name="twitter:title" content="{% t title_short %}">
+    <meta name="twitter:description" content="{% t description_short %}">
+    {% endif %}
+
     <meta name="twitter:card" content="summary_large_image">
     <meta name="note:card" content="summary_large_image">
     <meta property="fb:app_id" content="260081528424477">
@@ -72,8 +91,26 @@
 
     <link rel="manifest" href="/manifest.json">
 
+    {% if page.layout == "course" %}
+    <link rel="stylesheet" type="text/css" href="/css/course.css">
+    {% elsif page.layout == "post" %}
+    <link rel="stylesheet" type="text/css" href="/css/post.css">
+    {% elsif page.url == "/contact/" %}
+    <link rel="stylesheet" type="text/css" href="/css/form.css">
+    <script src="https://sdk.form.run/js/v2/formrun.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    {% elsif page.url == "/courses/" %}
+    <link rel="stylesheet" type="text/css" href="/css/courses.css">
+    {% else %}
     <link rel="stylesheet" type="text/css" href="/css/main.css">
+    {% endif %}
+
+    <script src="/assets/js/main.js" async></script>
     <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
+
+    {% if page.layout == "course" %}
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=URLSearchParams%2CObject.assign"></script>
+    {% endif %}
 
     <!-- Faviconの設定 -->
     <link rel="apple-touch-icon" sizes="57x57" href="/assets/images/favicon/apple-touch-icon-57x57.png">
@@ -96,19 +133,19 @@
     <meta name="msapplication-TileColor" content="#34a2df">
     <meta name="msapplication-config" content="/assets/images/favicon/browserconfig.xml">
     <!-- Faviconの設定終わり -->
+    {% if page.url != '/404.html' %}
+    <link rel="canonical" href="{{site.url}}{{page.url}}">
+    {% endif %}
+    {% include structured_data.html  %}
   </head>
   <body>
     {% if jekyll.environment == "production" %}
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5XSQ69G" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+    <!-- <script data-ad-client="ca-pub-6908119828329116" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
     {% else  %}
     {% endif %}
     {{content}}
   </body>
-  <!-- 遅延読み込み -->
-  {% if page.layout == "course" %}
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=URLSearchParams%2CObject.assign"></script>
-  {% endif %}
-  <script src="/assets/js/main.js" async></script>
 </html>
